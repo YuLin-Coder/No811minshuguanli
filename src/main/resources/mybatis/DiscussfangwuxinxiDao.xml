@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.DiscussfangwuxinxiDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.addtime as addtime
+        ,a.refid as refid
+        ,a.userid as userid
+        ,a.content as content
+        ,a.reply as reply
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.DiscussfangwuxinxiView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Discussfangwuxinxi  a
+        <where>
+            <if test=" params.addtimeStart != '' and params.addtimeStart != null and params.addtimeStart != 'null' ">
+                and a.addtime = #{params.addtimeStart}
+                <![CDATA[  and DATE_FORMAT(a.addtime, '%Y-%m-%d %H:%T:%s') &gt;=
+                DATE_FORMAT(#{params.addtimeStart}, '%Y-%m-%d %H:%T:%s')   ]]>
+            </if>
+            <if test=" params.addtimeEnd != '' and params.addtimeEnd != null and params.addtimeEnd != 'null' ">
+                and a.addtime = #{params.addtimeEnd}
+                <![CDATA[  and DATE_FORMAT(a.addtime, '%Y-%m-%d %H:%T:%s') &lt;=
+                DATE_FORMAT(#{params.addtimeEnd} , '%Y-%m-%d %H:%T:%s')    ]]>
+            </if>
+            <if test=" params.content != '' and params.content != null and params.content != 'null' ">
+                and a.content like CONCAT('%',#{params.content},'%')
+            </if>
+            <if test=" params.reply != '' and params.reply != null and params.reply != 'null' ">
+                and a.reply like CONCAT('%',#{params.reply},'%')
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>

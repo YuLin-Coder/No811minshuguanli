@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.DiscussfangwuxinxiDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.addtime as addtime
+        ,a.refid as refid
+        ,a.userid as userid
+        ,a.replycontent as replycontent
+        ,a.reply as reply
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.DiscussfangwuxinxiView" >
+        SELECT
+        <include refid="Base_Column_List" />,b.name,b.img_photo as imgPhoto
+        FROM Discussfangwuxinxi a left join yonghuxinxi b on a.userid = b.id
+        order by a.id desc
+    </select>
+
+</mapper>

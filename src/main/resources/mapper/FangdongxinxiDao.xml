@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.FangdongxinxiDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.name as name
+        ,a.account as account
+        ,a.password as password
+        ,a.img_photo as imgPhoto
+        ,a.role as role
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.FangdongxinxiView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Fangdongxinxi  a
+        <where>
+            <if test=" params.name != '' and params.name != null and params.name != 'null' ">
+                and a.name like CONCAT('%',#{params.name},'%')
+            </if>
+            <if test=" params.yh != '' and params.yh != null">
+                and a.id = #{params.yh}
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>

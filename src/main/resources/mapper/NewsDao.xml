@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.NewsDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.addtime as addtime
+        ,a.title as title
+        ,a.img_photo as imgPhoto
+        ,a.notice_content as noticeContent
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.NewsView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM News  a
+        <where>
+            <if test=" params.addtimeStart != '' and params.addtimeStart != null and params.addtimeStart != 'null' ">
+                and a.addtime = #{params.addtimeStart}
+                <![CDATA[  and DATE_FORMAT(a.addtime, '%Y-%m-%d %H:%T:%s') &gt;=
+                DATE_FORMAT(#{params.addtimeStart}, '%Y-%m-%d %H:%T:%s')   ]]>
+            </if>
+            <if test=" params.addtimeEnd != '' and params.addtimeEnd != null and params.addtimeEnd != 'null' ">
+                and a.addtime = #{params.addtimeEnd}
+                <![CDATA[  and DATE_FORMAT(a.addtime, '%Y-%m-%d %H:%T:%s') &lt;=
+                DATE_FORMAT(#{params.addtimeEnd} , '%Y-%m-%d %H:%T:%s')    ]]>
+            </if>
+            <if test=" params.title != '' and params.title != null and params.title != 'null' ">
+                and a.title like CONCAT('%',#{params.title},'%')
+            </if>
+            <if test=" params.noticeContent != '' and params.noticeContent != null and params.noticeContent != 'null' ">
+                and a.notice_content like CONCAT('%',#{params.noticeContent},'%')
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+
+</mapper>

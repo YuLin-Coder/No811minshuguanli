@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.FangwuxinxiDao">
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.fwname as fwname
+        ,a.fwlx_types as fwlxTypes
+        ,a.money as money
+        ,a.img_photo as imgPhoto
+        ,a.address as address
+        ,a.fwstate_types as fwstateTypes
+        ,a.fd_types as fdTypes
+        ,a.phone as phone
+        ,a.notice_content as noticeContent
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.FangwuxinxiView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM Fangwuxinxi  a
+        <where>
+            <if test=" params.fwname != '' and params.fwname != null and params.fwname != 'null' ">
+                and a.fwname like CONCAT('%',#{params.fwname},'%')
+            </if>
+            <if test=" params.fwlxTypes != '' and params.fwlxTypes != null and params.fwlxTypes != 'null' ">
+                and a.fwlx_types = #{params.fwlxTypes}
+            </if>
+            <if test=" params.fwstateTypes != '' and params.fwstateTypes != null and params.fwstateTypes != 'null' ">
+                and a.fwstate_types = #{params.fwstateTypes}
+            </if>
+            <if test=" params.fdTypes != '' and params.fdTypes != null and params.fdTypes != 'null' ">
+                and a.fd_types = #{params.fdTypes}
+            </if>
+            <if test=" params.fd != '' and params.fd != null">
+                and a.fd_types = #{params.fd}
+            </if>
+        </where>
+        order by a.id desc
+    </select>
+</mapper>
